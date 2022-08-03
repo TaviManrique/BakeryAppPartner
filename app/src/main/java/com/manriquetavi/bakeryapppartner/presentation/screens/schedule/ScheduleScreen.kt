@@ -1,10 +1,10 @@
-package com.manriquetavi.bakeryapppartner.presentation.screens.order
+package com.manriquetavi.bakeryapppartner.presentation.screens.schedule
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 
 @Composable
-fun OrderScreen(
+fun ScheduleScreen(
     paddingValues: PaddingValues
 ) {
 

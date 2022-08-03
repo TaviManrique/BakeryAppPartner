@@ -1,10 +1,10 @@
-package com.manriquetavi.bakeryapppartner.presentation.screens.order
+package com.manriquetavi.bakeryapppartner.presentation.screens.product
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 
 @Composable
-fun OrderScreen(
+fun ProductScreen(
     paddingValues: PaddingValues
 ) {
 
