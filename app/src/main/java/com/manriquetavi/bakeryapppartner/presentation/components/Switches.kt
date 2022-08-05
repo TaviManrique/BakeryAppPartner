@@ -1,32 +1,31 @@
-package com.manriquetavi.bakeryapppartner.presentation.components.switch
+package com.manriquetavi.bakeryapppartner.presentation.components
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Text
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.foundation.Canvas
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-
+import com.manriquetavi.bakeryapppartner.ui.theme.buttonBackgroundColor
 
 @Composable
 fun Switch(
+    modifier: Modifier,
     scale: Float = 2f,
     width: Dp = 36.dp,
     height: Dp = 20.dp,
-    checkedTrackColor: Color = Color(0xFF35898F),
+    checkedTrackColor: Color = MaterialTheme.colors.buttonBackgroundColor,
     uncheckedTrackColor: Color = Color(0xFFe0e0e0),
     thumbColor: Color = Color.White,
     gapBetweenThumbAndTrackEdge: Dp = 4.dp
@@ -47,7 +46,7 @@ fun Switch(
     )
 
     Canvas(
-        modifier = Modifier
+        modifier = modifier
             .size(width = width, height = height)
             .scale(scale = scale)
             .pointerInput(Unit) {
@@ -59,13 +58,11 @@ fun Switch(
                 )
             }
     ) {
-
         // Track
         drawRoundRect(
             color = if (switchON.value) checkedTrackColor else uncheckedTrackColor,
             cornerRadius = CornerRadius(x = 10.dp.toPx(), y = 10.dp.toPx())
         )
-
         // Thumb
         drawCircle(
             color = thumbColor,
@@ -75,10 +72,5 @@ fun Switch(
                 y = size.height / 2
             )
         )
-
     }
-
-    Spacer(modifier = Modifier.height(18.dp))
-
-    Text(text = if (switchON.value) "ON" else "OFF")
 }
