@@ -56,7 +56,6 @@ fun ProductItem() {
                     model = ImageRequest
                         .Builder(LocalContext.current)
                         .data( "https://firebasestorage.googleapis.com/v0/b/bakeryapp-d3dfa.appspot.com/o/categories_images%2Fcategory_cracker.png?alt=media&token=a6855c95-4b1d-4f29-b1be-b79200b87d90")
-                        .crossfade(500)
                         .build(),
                     placeholder = painterResource(id = R.drawable.ic_placeholder),
                     error = painterResource(id = R.drawable.ic_placeholder),
