@@ -10,6 +10,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -39,7 +41,11 @@ fun ScheduleScreen(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Switch(modifier = Modifier.padding(horizontal = 16.dp))
+            Switch(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp),
+                switchState = true
+            )
             Text(
                 modifier = Modifier.padding(start = 16.dp),
                 text = "Open",

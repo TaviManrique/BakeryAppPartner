@@ -8,4 +8,5 @@ class RepositoryFirestore
     private val firestore: FirestoreSource
 ){
     fun getAllCategories() = firestore.getAllCategories()
+    fun getAllFoods() = firestore.getAllFoods()
 }

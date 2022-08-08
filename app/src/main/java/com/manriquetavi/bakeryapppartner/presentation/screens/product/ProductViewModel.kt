@@ -1,11 +1,13 @@
 package com.manriquetavi.bakeryapppartner.presentation.screens.product
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.manriquetavi.bakeryapppartner.domain.model.Category
+import com.manriquetavi.bakeryapppartner.domain.model.Food
 import com.manriquetavi.bakeryapppartner.domain.model.Response
 import com.manriquetavi.bakeryapppartner.domain.use_cases.firestore.UseCasesFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,8 +25,12 @@ class ProductViewModel @Inject constructor(
     private val _allCategories = mutableStateOf<Response<List<Category>?>>(Response.Loading)
     val allCategories: State<Response<List<Category>?>> = _allCategories
 
+    private val _searchedFoods = mutableStateOf<Response<List<Food>?>>(Response.Loading)
+    val searchedFoods: MutableState<Response<List<Food>?>> = _searchedFoods
+
     init {
         getAllCategories()
+        getAllFoodsSearched()
     }
 
     fun updateSearchQuery(query: String) {
@@ -35,6 +41,13 @@ class ProductViewModel @Inject constructor(
         viewModelScope.launch {
             useCasesFirestore.getAllCategories().collect {
                 _allCategories.value = it
+            }
+        }
+    }
+    private fun getAllFoodsSearched() {
+        viewModelScope.launch {
+            useCasesFirestore.getAllFoods().collect {
+                _searchedFoods.value = it
             }
         }
     }

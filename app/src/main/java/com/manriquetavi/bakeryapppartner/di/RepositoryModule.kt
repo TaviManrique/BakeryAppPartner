@@ -3,6 +3,7 @@ package com.manriquetavi.bakeryapppartner.di
 import com.manriquetavi.bakeryapppartner.data.repository.RepositoryFirestore
 import com.manriquetavi.bakeryapppartner.domain.use_cases.firestore.UseCasesFirestore
 import com.manriquetavi.bakeryapppartner.domain.use_cases.firestore.categories.GetAllCategories
+import com.manriquetavi.bakeryapppartner.domain.use_cases.firestore.food.GetAllFoods
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,6 +19,7 @@ object RepositoryModule {
     fun provideUseCasesFirestore(
         repositoryFirestore: RepositoryFirestore
     ): UseCasesFirestore = UseCasesFirestore(
-        getAllCategories = GetAllCategories(repositoryFirestore)
+        getAllCategories = GetAllCategories(repositoryFirestore),
+        getAllFoods = GetAllFoods(repositoryFirestore)
     )
 }

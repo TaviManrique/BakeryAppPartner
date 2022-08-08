@@ -6,6 +6,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -28,18 +29,15 @@ fun Switch(
     checkedTrackColor: Color = MaterialTheme.colors.buttonBackgroundColor,
     uncheckedTrackColor: Color = Color(0xFFe0e0e0),
     thumbColor: Color = Color.White,
-    gapBetweenThumbAndTrackEdge: Dp = 4.dp
+    gapBetweenThumbAndTrackEdge: Dp = 4.dp,
+    switchState: Boolean
 ) {
-
-    val switchON = remember {
-        mutableStateOf(true)
-    }
 
     val thumbRadius = (height / 2) - gapBetweenThumbAndTrackEdge
 
     // To move the thumb, we need to calculate the position (along x axis)
     val animatePosition = animateFloatAsState(
-        targetValue = if (switchON.value)
+        targetValue = if (switchState)
             with(LocalDensity.current) { (width - thumbRadius - gapBetweenThumbAndTrackEdge).toPx() }
         else
             with(LocalDensity.current) { (thumbRadius + gapBetweenThumbAndTrackEdge).toPx() }
@@ -53,14 +51,14 @@ fun Switch(
                 detectTapGestures(
                     onTap = {
                         // This is called when the user taps on the canvas
-                        switchON.value = !switchON.value
+
                     }
                 )
             }
     ) {
         // Track
         drawRoundRect(
-            color = if (switchON.value) checkedTrackColor else uncheckedTrackColor,
+            color = if (switchState) checkedTrackColor else uncheckedTrackColor,
             cornerRadius = CornerRadius(x = 10.dp.toPx(), y = 10.dp.toPx())
         )
         // Thumb

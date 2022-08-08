@@ -2,6 +2,7 @@ package com.manriquetavi.bakeryapppartner.presentation.screens.product
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -21,13 +22,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.manriquetavi.bakeryapppartner.domain.model.Category
+import com.manriquetavi.bakeryapppartner.domain.model.Food
 import com.manriquetavi.bakeryapppartner.domain.model.Response
 import com.manriquetavi.bakeryapppartner.presentation.components.listcontent.CategoryItem
+import com.manriquetavi.bakeryapppartner.presentation.components.listcontent.FoodItem
 import com.manriquetavi.bakeryapppartner.presentation.components.progress.ProgressCircular
 import com.manriquetavi.bakeryapppartner.presentation.components.textfield.SearchProductInputField
-import com.manriquetavi.bakeryapppartner.ui.theme.EXTRA_SMALL_PADDING
 import com.manriquetavi.bakeryapppartner.ui.theme.SMALL_PADDING
 import com.manriquetavi.bakeryapppartner.ui.theme.buttonBackgroundColor
+import com.manriquetavi.bakeryapppartner.util.Util
 
 @Composable
 fun ProductScreen(
@@ -78,10 +81,16 @@ fun ProductScreen(
         }
         Spacer(modifier = Modifier.height(16.dp))
         //Row height 100.dp
-        when(val allRecommendations = productViewModel.allCategories.value) {
+        when(val allCategories = productViewModel.allCategories.value) {
             is Response.Loading -> CategoriesProgressBar()
-            is Response.Success -> CategoriesContent(allRecommendations.data)
-            is Response.Error -> {}
+            is Response.Success -> CategoriesContent(allCategories.data)
+            is Response.Error -> Util.printError(allCategories.message)
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        when(val searchedFoods = productViewModel.searchedFoods.value) {
+            is Response.Loading -> SearchedFoodsProgressBar()
+            is Response.Success -> SearchedFoodsContent(searchedFoods.data)
+            is Response.Error -> Util.printError(searchedFoods.message)
         }
     }
 }
@@ -118,6 +127,41 @@ fun CategoriesProgressBar() {
             .fillMaxWidth()
     ) {
         ProgressCircular()
+    }
+}
+
+@Composable
+fun SearchedFoodsProgressBar() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(460.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        ProgressCircular()
+    }
+}
+
+@Composable
+fun SearchedFoodsContent(foods: List<Food>?) {
+    LazyColumn(
+        modifier = Modifier
+            .padding(top = SMALL_PADDING)
+            .height(360.dp),
+        contentPadding = PaddingValues(all = SMALL_PADDING),
+        verticalArrangement = Arrangement.spacedBy(SMALL_PADDING)
+    ) {
+        foods?.let {
+            items(
+                items = foods,
+                key = { food ->
+                    food.id!!
+                }
+            ) { food ->
+                FoodItem(food = food)
+            }
+        }
     }
 }
 

@@ -9,6 +9,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,12 +25,16 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.manriquetavi.bakeryapppartner.R
+import com.manriquetavi.bakeryapppartner.domain.model.Food
 import com.manriquetavi.bakeryapppartner.ui.theme.*
 import com.manriquetavi.bakeryapppartner.presentation.components.Switch
 
 @Composable
-fun ProductItem() {
+fun FoodItem(
+    food: Food
+) {
     val context = LocalContext.current
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -55,7 +61,7 @@ fun ProductItem() {
                         .background(Color.White),
                     model = ImageRequest
                         .Builder(LocalContext.current)
-                        .data( "https://firebasestorage.googleapis.com/v0/b/bakeryapp-d3dfa.appspot.com/o/categories_images%2Fcategory_cracker.png?alt=media&token=a6855c95-4b1d-4f29-b1be-b79200b87d90")
+                        .data(food.image)
                         .build(),
                     placeholder = painterResource(id = R.drawable.ic_placeholder),
                     error = painterResource(id = R.drawable.ic_placeholder),
@@ -72,20 +78,20 @@ fun ProductItem() {
             ) {
                 Column {
                     Text(
-                        text = "Title",
+                        text = food.name.toString(),
                         style = MaterialTheme.typography.h6,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                         fontWeight = FontWeight.SemiBold
                     )
                     Text(
-                        text = "Category",
+                        text = food.category.toString(),
                         style = MaterialTheme.typography.caption,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        text = "10.0",
+                        text = food.price.toString(),
                         style = MaterialTheme.typography.caption,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -101,8 +107,9 @@ fun ProductItem() {
                     Switch(
                         modifier = Modifier
                             .padding(horizontal = 16.dp),
-                        width = 27.dp,
-                        height = 15.dp
+                        width = 30.dp,
+                        height = 15.dp,
+                        switchState = food.onStock
                     )
                     IconButton(
                         onClick = {
@@ -123,13 +130,15 @@ fun ProductItem() {
 
 @Preview(showSystemUi = true)
 @Composable
-fun ProductItemPreview() {
+fun FoodItemPreview() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(PRODUCT_ITEM_HEIGHT),
         contentAlignment = Alignment.Center
     ) {
-        ProductItem()
+        FoodItem(
+            food = Food()
+        )
     }
 }
