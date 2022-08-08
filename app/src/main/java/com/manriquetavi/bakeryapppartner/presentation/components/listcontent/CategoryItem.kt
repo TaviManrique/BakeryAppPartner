@@ -21,12 +21,13 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.manriquetavi.bakeryapppartner.R
+import com.manriquetavi.bakeryapppartner.domain.model.Category
 import com.manriquetavi.bakeryapppartner.ui.theme.EXTRA_SMALL_PADDING
 import com.manriquetavi.bakeryapppartner.ui.theme.PRODUCT_ITEM_HEIGHT
 
 @Composable
 fun CategoryItem(
-
+    category: Category
 ) {
     Card(
         modifier = Modifier
@@ -51,7 +52,7 @@ fun CategoryItem(
                         .background(Color.White),
                     model = ImageRequest
                         .Builder(LocalContext.current)
-                        .data("https://firebasestorage.googleapis.com/v0/b/bakeryapp-d3dfa.appspot.com/o/categories_images%2Fcategory_cracker.png?alt=media&token=a6855c95-4b1d-4f29-b1be-b79200b87d90")
+                        .data(category.image)
                         .build(),
                     placeholder = painterResource(id = R.drawable.ic_placeholder),
                     error = painterResource(id = R.drawable.ic_placeholder),
@@ -60,7 +61,7 @@ fun CategoryItem(
                 )
             }
             Text(
-                text = "Category",
+                text = category.name.toString(),
                 style = MaterialTheme.typography.caption,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -78,6 +79,8 @@ fun CategoryItemPreview() {
             .height(PRODUCT_ITEM_HEIGHT),
         contentAlignment = Alignment.Center
     ) {
-        CategoryItem()
+        CategoryItem(
+            category = Category()
+        )
     }
 }

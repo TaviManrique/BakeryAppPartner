@@ -15,8 +15,10 @@ import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
 import com.manriquetavi.bakeryapppartner.navigation.SetupNavGraph
 import com.manriquetavi.bakeryapppartner.ui.theme.BakeryAppPartnerTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 @ExperimentalCoilApi
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private lateinit var screenNavController: NavHostController
