@@ -1,5 +1,6 @@
 package com.manriquetavi.bakeryapppartner.presentation.components
 
+import android.widget.Toast
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -15,9 +16,11 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.manriquetavi.bakeryapppartner.presentation.screens.product.ProductViewModel
 import com.manriquetavi.bakeryapppartner.ui.theme.buttonBackgroundColor
 
 @Composable
@@ -30,9 +33,11 @@ fun Switch(
     uncheckedTrackColor: Color = Color(0xFFe0e0e0),
     thumbColor: Color = Color.White,
     gapBetweenThumbAndTrackEdge: Dp = 4.dp,
-    switchState: Boolean
+    switchState: Boolean,
+    onTap: (Offset) -> Unit
 ) {
 
+    val context = LocalContext.current
     val thumbRadius = (height / 2) - gapBetweenThumbAndTrackEdge
 
     // To move the thumb, we need to calculate the position (along x axis)
@@ -49,10 +54,7 @@ fun Switch(
             .scale(scale = scale)
             .pointerInput(Unit) {
                 detectTapGestures(
-                    onTap = {
-                        // This is called when the user taps on the canvas
-
-                    }
+                    onTap = onTap
                 )
             }
     ) {

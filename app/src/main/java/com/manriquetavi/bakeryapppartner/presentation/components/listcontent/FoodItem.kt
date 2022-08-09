@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,16 +23,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.manriquetavi.bakeryapppartner.R
 import com.manriquetavi.bakeryapppartner.domain.model.Food
+import com.manriquetavi.bakeryapppartner.domain.model.Response
 import com.manriquetavi.bakeryapppartner.ui.theme.*
 import com.manriquetavi.bakeryapppartner.presentation.components.Switch
+import com.manriquetavi.bakeryapppartner.presentation.components.progress.ProgressCircular
+import com.manriquetavi.bakeryapppartner.presentation.screens.product.ProductViewModel
+import com.manriquetavi.bakeryapppartner.util.Util
 
 @Composable
 fun FoodItem(
-    food: Food
+    id: Int,
+    food: Food,
+    productViewModel: ProductViewModel
 ) {
     val context = LocalContext.current
 
@@ -40,7 +48,11 @@ fun FoodItem(
             .fillMaxWidth()
             .height(PRODUCT_ITEM_HEIGHT)
             .padding(EXTRA_SMALL_PADDING)
-            .clickable { Toast.makeText(context, "Card", Toast.LENGTH_SHORT).show() },
+            .clickable {
+                Toast
+                    .makeText(context, "Card", Toast.LENGTH_SHORT)
+                    .show()
+            },
         shape = RoundedCornerShape(SMALL_PADDING),
         backgroundColor = Purple200
     ) {
@@ -96,6 +108,7 @@ fun FoodItem(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
+
                 }
                 Row(
                     modifier = Modifier
@@ -104,22 +117,32 @@ fun FoodItem(
                     horizontalArrangement = Arrangement.SpaceBetween
 
                 ) {
-                    Switch(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp),
-                        width = 30.dp,
-                        height = 15.dp,
-                        switchState = food.onStock
-                    )
+                    when(val changeOnStatus = productViewModel.changeOnStockState.value) {
+                        is Response.Loading -> CircularProgressIndicator()
+                        is Response.Success -> Switch(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp),
+                            width = 30.dp,
+                            height = 15.dp,
+                            switchState = food.onStock
+                        ) {
+                            productViewModel.changeOnStockStatus(
+                                foodId = food.id!!,
+                                onStock = food.onStock
+                            )
+                        }
+                        is Response.Error -> Util.printError(changeOnStatus.message)
+                    }
+
                     IconButton(
                         onClick = {
-                            Toast.makeText(context, "Trash Icon", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Edit Icon", Toast.LENGTH_SHORT).show()
                         }
                     ) {
                         Icon(
-                            imageVector = Icons.Filled.Delete,
+                            imageVector = Icons.Filled.Edit,
                             tint = MaterialTheme.colors.buttonBackgroundColor,
-                            contentDescription = "Remove Icon"
+                            contentDescription = "Edit Icon"
                         )
                     }
                 }
@@ -138,7 +161,9 @@ fun FoodItemPreview() {
         contentAlignment = Alignment.Center
     ) {
         FoodItem(
-            food = Food()
+            id = 1,
+            food = Food(),
+            productViewModel = hiltViewModel()
         )
     }
 }

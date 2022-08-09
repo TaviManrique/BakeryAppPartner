@@ -11,6 +11,7 @@ import com.manriquetavi.bakeryapppartner.domain.model.Food
 import com.manriquetavi.bakeryapppartner.domain.model.Response
 import com.manriquetavi.bakeryapppartner.domain.use_cases.firestore.UseCasesFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,6 +29,9 @@ class ProductViewModel @Inject constructor(
     private val _searchedFoods = mutableStateOf<Response<List<Food>?>>(Response.Loading)
     val searchedFoods: MutableState<Response<List<Food>?>> = _searchedFoods
 
+    private val _changeOnStockState = mutableStateOf<Response<Void?>>(Response.Success(null))
+    val changeOnStockState: State<Response<Void?>> = _changeOnStockState
+
     init {
         getAllCategories()
         getAllFoodsSearched()
@@ -35,6 +39,14 @@ class ProductViewModel @Inject constructor(
 
     fun updateSearchQuery(query: String) {
         _searchQuery.value = query
+    }
+
+    fun changeOnStockStatus(foodId: String, onStock: Boolean) {
+        viewModelScope.launch {
+            useCasesFirestore.changeOnStockStatus(foodId, onStock).collect { response ->
+                _changeOnStockState.value = response
+            }
+        }
     }
 
     private fun getAllCategories() {

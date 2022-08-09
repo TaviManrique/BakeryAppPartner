@@ -9,4 +9,5 @@ class RepositoryFirestore
 ){
     fun getAllCategories() = firestore.getAllCategories()
     fun getAllFoods() = firestore.getAllFoods()
+    fun changeOnStockStatus(foodId: String, onStock: Boolean) = firestore.changeOnStockStatus(foodId, onStock)
 }

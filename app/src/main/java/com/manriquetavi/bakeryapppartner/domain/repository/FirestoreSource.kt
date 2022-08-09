@@ -8,4 +8,5 @@ import kotlinx.coroutines.flow.Flow
 interface FirestoreSource {
     fun getAllCategories(): Flow<Response<List<Category>?>>
     fun getAllFoods(): Flow<Response<List<Food>?>>
+    fun changeOnStockStatus(foodId: String, onStock: Boolean): Flow<Response<Void?>>
 }

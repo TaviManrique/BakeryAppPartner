@@ -45,7 +45,9 @@ fun ScheduleScreen(
                 modifier = Modifier
                     .padding(horizontal = 16.dp),
                 switchState = true
-            )
+            ) {
+
+            }
             Text(
                 modifier = Modifier.padding(start = 16.dp),
                 text = "Open",

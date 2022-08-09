@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -89,7 +91,7 @@ fun ProductScreen(
         Spacer(modifier = Modifier.height(16.dp))
         when(val searchedFoods = productViewModel.searchedFoods.value) {
             is Response.Loading -> SearchedFoodsProgressBar()
-            is Response.Success -> SearchedFoodsContent(searchedFoods.data)
+            is Response.Success -> SearchedFoodsContent(searchedFoods.data, productViewModel)
             is Response.Error -> Util.printError(searchedFoods.message)
         }
     }
@@ -135,7 +137,7 @@ fun SearchedFoodsProgressBar() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(460.dp),
+            .height(360.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -144,7 +146,7 @@ fun SearchedFoodsProgressBar() {
 }
 
 @Composable
-fun SearchedFoodsContent(foods: List<Food>?) {
+fun SearchedFoodsContent(foods: List<Food>?, productViewModel: ProductViewModel) {
     LazyColumn(
         modifier = Modifier
             .padding(top = SMALL_PADDING)
@@ -152,6 +154,7 @@ fun SearchedFoodsContent(foods: List<Food>?) {
         contentPadding = PaddingValues(all = SMALL_PADDING),
         verticalArrangement = Arrangement.spacedBy(SMALL_PADDING)
     ) {
+        /*
         foods?.let {
             items(
                 items = foods,
@@ -159,7 +162,12 @@ fun SearchedFoodsContent(foods: List<Food>?) {
                     food.id!!
                 }
             ) { food ->
-                FoodItem(food = food)
+                FoodItem(food = food, productViewModel = productViewModel)
+            }
+        }*/
+        foods?.let { foods ->
+            itemsIndexed(foods) { id, food ->
+                FoodItem(id = id, food = food, productViewModel = productViewModel)
             }
         }
     }
